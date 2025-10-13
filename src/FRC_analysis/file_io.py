@@ -117,21 +117,15 @@ def save_mean_frcs(
             + " nm \n"
         )
 
-def save_mean_frcs_single(frc: "np.ndarray", output_folder: str) -> None:
 
+def save_mean_frcs_single(frc: "np.ndarray", output_folder: str) -> None:
     all_mean = np.mean(frc)
     all_sd = np.std(frc, ddof=1)
 
     with open(os.path.join(output_folder, "mean_frcs.txt"), "w") as f:
-        f.write(
-            "The mean FRC resolution for the data is: "
-            + str(all_mean)
-            + " nm \n"
-        )
+        f.write("The mean FRC resolution for the data is: " + str(all_mean) + " nm \n")
 
-        f.write(
-            "The standard deviation for the data is: " + str(all_sd) + " nm \n"
-        )
+        f.write("The standard deviation for the data is: " + str(all_sd) + " nm \n")
 
 
 def save_p_value(p_value: float, output_folder: str) -> None:
@@ -166,11 +160,12 @@ def save_frc_results(
 
     return dataframe
 
-def save_frc_results_single(frcs: "np.ndarray",
+
+def save_frc_results_single(
+    frcs: "np.ndarray",
     loc_files: list,
     output_folder: str,
 ) -> "pd.DataFrame":
-    
     dataframe = pd.DataFrame(frcs, columns=["FRC resolution (nm)"])
 
     dataframe.insert(0, "Blank", [""] * len(loc_files))
