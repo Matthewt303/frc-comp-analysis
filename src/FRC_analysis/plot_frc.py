@@ -34,7 +34,7 @@ def plot_frc(
 
     res_raw_v, res_dn_v = 1 / res_raw, 1 / res_denoised
 
-    mpl.rcParams["font.sans-serif"] = ["Nimbus Sans"]
+    mpl.rcParams["font.sans-serif"] = ["Arial"]
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
@@ -114,7 +114,7 @@ def plot_all(all_data: "pd.DataFrame", output_folder: str) -> None:
 
     plt.ioff()
 
-    mpl.rcParams["font.sans-serif"] = ["Nimbus Sans"]
+    mpl.rcParams["font.sans-serif"] = ["Arial"]
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
@@ -199,7 +199,7 @@ def plot_frc_sigma(
 ) -> None:
     res_raw_v, res_dn_v = 1 / res_raw, 1 / res_denoised
 
-    mpl.rcParams["font.sans-serif"] = ["Nimbus Sans"]
+    mpl.rcParams["font.sans-serif"] = ["Arial"]
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
@@ -294,7 +294,7 @@ def plot_frc_single(
 
     res_v = 1 / res
 
-    mpl.rcParams["font.sans-serif"] = ["Nimbus Sans"]
+    mpl.rcParams["font.sans-serif"] = ["Arial"]
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
