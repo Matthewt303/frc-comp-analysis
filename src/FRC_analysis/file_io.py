@@ -94,7 +94,7 @@ def save_mean_frcs(
     raw_frc: "np.ndarray", denoised_frc: "np.ndarray", output_folder: str
 ) -> None:
     raw_mean, denoised_mean = np.mean(raw_frc), np.mean(denoised_frc)
-    raw_sd, denoised_sd = np.std(raw_frc), np.std(denoised_frc)
+    raw_sd, denoised_sd = np.std(raw_frc, ddof=1), np.std(denoised_frc, ddof=1)
 
     with open(os.path.join(output_folder, "mean_frcs.txt"), "w") as f:
         f.write(
@@ -115,6 +115,22 @@ def save_mean_frcs(
             "The standard deviation for denoised data is: "
             + str(denoised_sd)
             + " nm \n"
+        )
+
+def save_mean_frcs_single(frc: "np.ndarray", output_folder: str) -> None:
+
+    all_mean = np.mean(frc)
+    all_sd = np.std(frc, ddof=1)
+
+    with open(os.path.join(output_folder, "mean_frcs.txt"), "w") as f:
+        f.write(
+            "The mean FRC resolution for the data is: "
+            + str(all_mean)
+            + " nm \n"
+        )
+
+        f.write(
+            "The standard deviation for the data is: " + str(all_sd) + " nm \n"
         )
 
 
@@ -145,6 +161,20 @@ def save_frc_results(
 
     dataframe.insert(0, "Designation", designations)
     dataframe.insert(0, "File name", all_files)
+
+    dataframe.to_csv(os.path.join(output_folder, "all_results.csv"), index=False)
+
+    return dataframe
+
+def save_frc_results_single(frcs: "np.ndarray",
+    loc_files: list,
+    output_folder: str,
+) -> "pd.DataFrame":
+    
+    dataframe = pd.DataFrame(frcs, columns=["FRC resolution (nm)"])
+
+    dataframe.insert(0, "Blank", [""] * len(loc_files))
+    dataframe.insert(0, "File name", loc_files)
 
     dataframe.to_csv(os.path.join(output_folder, "all_results.csv"), index=False)
 

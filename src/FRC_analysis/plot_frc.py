@@ -161,7 +161,7 @@ def plot_all(all_data: "pd.DataFrame", output_folder: str) -> None:
     ax.tick_params(axis="x", which="major", length=6, direction="in")
     ax.tick_params(axis="x", which="minor", length=3, direction="in")
 
-    ax.yaxis.set_minor_locator(AutoMinorLocator(11))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(10))
     ax.yaxis.set_major_formatter(FormatStrFormatter("%.0f"))
 
     ax.xaxis.label.set_color("black")
@@ -351,3 +351,75 @@ def plot_frc_single(
 
     plt.savefig(os.path.join(output_folder, "frc_plot_" + str(index) + ".png"))
     plt.savefig(os.path.join(output_folder, "frc_plot_" + str(index) + ".svg"))
+
+
+def plot_all_single(all_data: "pd.DataFrame", output_folder: str) -> None:
+    plt.ioff()
+
+    mpl.rcParams["font.sans-serif"] = ["Arial"]
+    mpl.rcParams["font.family"] = "sans-serif"
+    mpl.rcParams["font.size"] = 28
+
+    sns.set_style("ticks")
+
+    plt.rcParams["xtick.bottom"] = True
+    plt.rcParams["ytick.left"] = True
+
+    fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
+
+    fig.patch.set_facecolor("white")
+    ax.set_facecolor("white")
+
+    graph = sns.stripplot(
+        x=all_data[all_data.columns[1]],
+        y=all_data[all_data.columns[2]],
+        data=all_data,
+        s=15,
+        color="midnightblue",
+    )
+
+    sns.pointplot(
+        data=all_data,
+        x=all_data[all_data.columns[1]],
+        y=all_data[all_data.columns[2]],
+        errorbar="sd",
+        markers="_",
+        linestyles="none",
+        capsize=0.2,
+        linewidth=4.0,
+        color="darkgreen",
+    )
+
+    graph.tick_params(labelsize=30, pad=4)
+
+    ratio = 1.0
+
+    x_left, x_right = ax.get_xlim()
+    y_low, y_high = ax.get_ylim()
+    ax.set_aspect(abs((x_right - x_left) / (y_low - y_high)) * ratio)
+
+    ax.tick_params(axis="y", which="major", length=6, direction="in")
+    ax.tick_params(axis="y", which="minor", length=3, direction="in")
+    ax.tick_params(axis="x", which="major", length=6, direction="in")
+    ax.tick_params(axis="x", which="minor", length=3, direction="in")
+
+    ax.yaxis.set_minor_locator(AutoMinorLocator(10))
+    ax.yaxis.set_major_formatter(FormatStrFormatter("%.0f"))
+
+    ax.xaxis.label.set_color("black")
+    ax.yaxis.label.set_color("black")
+
+    ax.spines["bottom"].set_color("black")
+    ax.spines["top"].set_color("black")
+    ax.spines["right"].set_color("black")
+    ax.spines["left"].set_color("black")
+    ax.spines["bottom"].set_linewidth(2.0)
+    ax.spines["top"].set_linewidth(2.0)
+    ax.spines["right"].set_linewidth(2.0)
+    ax.spines["left"].set_linewidth(2.0)
+
+    ax.set_xlabel("Data type", labelpad=6, fontsize=36)
+    ax.set_ylabel(all_data.columns[2], labelpad=3, fontsize=36)
+
+    plt.savefig(os.path.join(output_folder, "all_frcs_plot.png"))
+    plt.savefig(os.path.join(output_folder, "all_frcs_plot.svg"))

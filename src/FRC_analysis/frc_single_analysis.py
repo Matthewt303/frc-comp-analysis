@@ -11,7 +11,7 @@ import argparse
 import os
 import file_io as io
 from frc_calculation import frc_fixed
-from plot_frc import plot_frc_single, plot_all
+from plot_frc import plot_frc_single, plot_all_single
 
 
 def check_args(args: object):
@@ -76,13 +76,13 @@ def main():
 
         print("Processed dataset " + str(i + 1) + "\n")
 
-    io.save_mean_frcs(frcs, frcs.copy(), opt.output_folder)
+    io.save_mean_frcs_single(frcs, opt.output_folder)
 
-    all_data = io.save_frc_results(
+    all_data = io.save_frc_results_single(
         frcs, frcs.copy(), data, data.copy(), opt.output_folder
     )
 
-    plot_all(all_data, opt.output_folder)
+    plot_all_single(all_data, opt.output_folder)
 
     print("FRC calculations complete! The data are saved in -> " + opt.output_folder)
 
