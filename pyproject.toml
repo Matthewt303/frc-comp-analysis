@@ -47,7 +47,7 @@ dependencies = [
 dev = ["ruff >= 0.14.0"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/FRC_analysis"]
+packages = ["src/frc_comp_analysis"]
 
 [project.scripts]
-denoising-analysis = "FRC_analysis:frc_n_dn_analysis"
+comparative-analysis = "frc_comp_analysis.frc_n_dn_analysis:main"

@@ -11,9 +11,9 @@ import pandas as pd
 import tifffile as tiff
 import os
 import argparse
-from FRC_analysis.frc_calculation import calculate_p_value
-from FRC_analysis.file_io import save_p_value
-from FRC_analysis.plot_frc import plot_all
+from frc_comp_analysis.frc_calculation import calculate_p_value
+from frc_comp_analysis.file_io import save_p_value
+from frc_comp_analysis.plot_frc import plot_all
 
 ## Image loading ##
 
