@@ -3,6 +3,11 @@
 frc-comp-analysis is library for end-to-end Fourier ring correlation analysis
 between two sets of single-molecule localization data or batch analysis for one set of localisation data. It is packaged as a python module that contains several command line scripts. 
 
+The FRC calculation is based on:
+Nieuwenhuizen, R. P. J., Lidke, K. A., Bates, M., Puig, D. L., Grünwald, D.,
+Stallinga, S. & Rieger, B. Measuring image resolution in optical nanoscopy. *Nature
+Methods* **10"", 557–562 (2013).
+
 ## Prerequisites
 
 - Python 3.11 or later
@@ -25,15 +30,15 @@ pip install frc-comp-analysis
 It is recommended to run the analysis as a command line script. It can be run as:
 
 ```bash
-comparative-analysis --data_folder --comp_folder --output_folder --magnification 
---split_method --criterion
+comparative-analysis --data_folder /path/to/condition_A --comp_folder /path/to/condition_B --output_folder /path/to/output --magnification 0.1 
+--split_method odd_even --criterion fixed
 ```
 
 Alternatively, in powershell:
 
 ```powershell
-comparative-analysis.exe --data_folder --comp_folder --output_folder --magnification 
---split_method --criterion
+comparative-analysis.exe --data_folder \path\to\condition_A --comp_folder \path\to\condition_B --output_folder \path\to\output --magnification 0.1 
+--split_method odd_even --criterion fixed
 ```
 
 ### As a python script
@@ -42,6 +47,19 @@ comparative-analysis.exe --data_folder --comp_folder --output_folder --magnifica
 import frc-comp-analysis
 
 ```
+
+## Parameters
+
+A brief summary of parameters is given here. A more detailed explanation is given by typing:
+
+```bash
+comparative-analysis --help
+```
+- --magnification: scaling factor for super-resolution image
+- --split_method: how the dataset is split
+- --criterion: threshold for determining resolution.
+
+For more detailed discussions on these parameters, please refer to the original paper.
 
 ## What to expect
 For comparative analysis, the module should calculate the FRC resolution for each
