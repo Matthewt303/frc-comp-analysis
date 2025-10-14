@@ -55,9 +55,9 @@ A brief summary of parameters is given here. A more detailed explanation is give
 ```bash
 comparative-analysis --help
 ```
-- --magnification: scaling factor for super-resolution image
-- --split_method: how the dataset is split
-- --criterion: threshold for determining resolution.
+- --magnification: scaling factor for super-resolution image. Between 0.1 to 0.25 is recommended
+- --split_method: how the dataset is split. Use 'simple' or 'odd_even'.
+- --criterion: threshold for determining resolution. Use 'fixed' or '3sigma'.
 
 For more detailed discussions on these parameters, please refer to the original paper.
 

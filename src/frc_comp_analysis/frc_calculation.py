@@ -215,7 +215,7 @@ def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
         frc_curve[np.isnan(frc_curve)] = 0
 
     end2 = time.time()
-    print("FRC calc done")
+    print("FRC calc done \n")
     print("FRC calc took " + str(end2 - start2) + " seconds")
 
     return frc_curve[0:edge]
@@ -337,15 +337,17 @@ def frc_fixed(locs: "np.ndarray", magnification: float, split_method: str):
 
 
 def frc_sigma(locs: "np.ndarray", magnification: float, split_method: str):
-    frc_curve, spatial_freqs, radii = calculate_frc_sigma(
+    frc_curve, spatial_freqs, sig_curve = calculate_frc_sigma(
         locs, split_method, magnification
     )
 
     frc_smoothed = smooth_savgol(frc_curve)
 
-    frc_res, frc_res_val = calculate_frc_res_sigma(frc_smoothed, spatial_freqs, radii)
+    frc_res, frc_res_val = calculate_frc_res_sigma(
+        frc_smoothed, spatial_freqs, sig_curve
+    )
 
-    return frc_smoothed, spatial_freqs, 1 / frc_res, frc_res_val, radii
+    return frc_smoothed, spatial_freqs, 1 / frc_res, frc_res_val, sig_curve
 
 
 def calculate_p_value(raw_frc: "np.ndarray", denoised_frc: "np.ndarray") -> float:

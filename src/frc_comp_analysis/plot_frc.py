@@ -207,12 +207,18 @@ def plot_frc_sigma(
 
     ax.plot(v_raw, frc_raw, "darkmagenta", label="Noisy", linewidth=4.5)
     ax.plot(v_denoised, frc_denoised, "salmon", label="Denoised", linewidth=4.5)
-    ax.plot(v_raw, sigma_curve_n, "royalblue", label="3-σ curve noisy", linewidth=4.5)
+    ax.plot(
+        v_raw,
+        sigma_curve_n,
+        "royalblue",
+        label=r"3-$\sigma$ curve noisy",
+        linewidth=4.5,
+    )
     ax.plot(
         v_denoised,
         sigma_curve_dn,
         "lightseagreen",
-        label="3-σ curve denoised",
+        label=r"3-$\sigma$ curve denoised",
         linewidth=4.5,
     )
     ax.plot(
@@ -232,7 +238,7 @@ def plot_frc_sigma(
         markeredgecolor="k",
     )
 
-    leg = plt.legend(loc="upper right")
+    leg = plt.legend(bbox_to_anchor=(0.5, 1.175), loc="upper center", ncol=2)
 
     for line in leg.get_lines():
         line.set_linewidth(3.5)
@@ -302,6 +308,78 @@ def plot_frc_single(
 
     ax.plot(v, frc, "darkmagenta", label="FRC", linewidth=4.5)
     ax.plot(v, threshold_plot, "royalblue", label="Threshold", linewidth=4.5)
+    ax.plot(
+        res_v, res_frc, "blueviolet", marker=".", markersize=24, markeredgecolor="k"
+    )
+
+    leg = plt.legend(loc="upper right")
+
+    for line in leg.get_lines():
+        line.set_linewidth(3.5)
+
+    for text in leg.get_texts():
+        text.set_fontsize(28)
+
+    ax.set_ylim(bottom=np.min(frc), top=1)
+    ax.set_xlim(left=0)
+
+    ratio = 1.0
+
+    x_left, x_right = ax.get_xlim()
+    y_low, y_high = ax.get_ylim()
+    ax.set_aspect(abs((x_right - x_left) / (y_low - y_high)) * ratio)
+
+    ax.tick_params(axis="y", which="major", length=6, direction="in", pad=10)
+    ax.tick_params(axis="y", which="minor", length=3, direction="in")
+    ax.tick_params(axis="x", which="major", length=6, direction="in", pad=10)
+    ax.tick_params(axis="x", which="minor", length=3, direction="in")
+
+    ax.xaxis.set_minor_locator(AutoMinorLocator(10))
+    ax.xaxis.set_major_formatter(FormatStrFormatter("%.2f"))
+    ax.yaxis.set_minor_locator(AutoMinorLocator(10))
+
+    ax.xaxis.label.set_color("black")
+    ax.yaxis.label.set_color("black")
+
+    ax.spines["bottom"].set_color("black")
+    ax.spines["top"].set_color("black")
+    ax.spines["right"].set_color("black")
+    ax.spines["left"].set_color("black")
+    ax.spines["bottom"].set_linewidth(2.0)
+    ax.spines["top"].set_linewidth(2.0)
+    ax.spines["right"].set_linewidth(2.0)
+    ax.spines["left"].set_linewidth(2.0)
+
+    ax.set_xlabel(
+        r"Spatial frequency $\mathregular{(nm^{-1})}$", labelpad=-3, fontsize=36
+    )
+    ax.set_ylabel("Fourier Ring Correlation", labelpad=2, fontsize=36)
+
+    plt.savefig(os.path.join(output_folder, "frc_plot_" + str(index) + ".png"))
+    plt.savefig(os.path.join(output_folder, "frc_plot_" + str(index) + ".svg"))
+
+
+def plot_frc_single_sigma(
+    frc: "np.ndarray",
+    v: "np.ndarray",
+    res: float,
+    res_frc: float,
+    index: int,
+    output_folder: str,
+    sigma_curve: "np.ndarray",
+) -> None:
+    res_v = 1 / res
+
+    mpl.rcParams["font.sans-serif"] = ["Arial"]
+    mpl.rcParams["font.family"] = "sans-serif"
+    mpl.rcParams["font.size"] = 28
+
+    fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
+
+    ax.plot(v, frc, "darkmagenta", label="FRC", linewidth=4.5)
+    ax.plot(
+        v, sigma_curve, "royalblue", label=r"3-$\sigma$ curve denoised", linewidth=4.5
+    )
     ax.plot(
         res_v, res_frc, "blueviolet", marker=".", markersize=24, markeredgecolor="k"
     )

@@ -9,9 +9,14 @@ Created on Fri Jun 20 11:33:22 2025
 import numpy as np
 import argparse
 import os
-import FRC_analysis.file_io as io
-from FRC_analysis.frc_calculation import frc_fixed
-from FRC_analysis.plot_frc import plot_frc_single, plot_all_single
+import frc_comp_analysis.file_io as io
+from frc_comp_analysis.frc_calculation import frc_fixed, frc_sigma
+import frc_comp_analysis.plot_frc as frcplt
+from frc_comp_analysis.plot_frc import (
+    plot_frc_single,
+    plot_all_single,
+    plot_frc_single_sigma,
+)
 
 
 def check_args(args: object):
@@ -68,7 +73,18 @@ def main():
                 locs, opt.magnification, opt.split_method
             )
 
-            plot_frc_single(frc, spatial_freq, res, frc_res, i + 1, opt.output_folder)
+            frcplt.plot_frc_single(
+                frc, spatial_freq, res, frc_res, i + 1, opt.output_folder
+            )
+
+        elif opt.criterion == "3sigma":
+            frc, spatial_freq, res, frc_res, sig_curve = frc_sigma(
+                locs, opt.magnification, opt.split_method
+            )
+
+            frcplt.plot_frc_single_sigma(
+                frc, spatial_freq, res, frc_res, i + 1, opt.output_folder, sig_curve
+            )
 
         frcs[i, 0] = res
 
@@ -78,11 +94,9 @@ def main():
 
     io.save_mean_frcs_single(frcs, opt.output_folder)
 
-    all_data = io.save_frc_results_single(
-        frcs, frcs.copy(), data, data.copy(), opt.output_folder
-    )
+    all_data = io.save_frc_results_single(frcs, data, opt.output_folder)
 
-    plot_all_single(all_data, opt.output_folder)
+    frcplt.plot_all_single(all_data, opt.output_folder)
 
     print("FRC calculations complete! The data are saved in -> " + opt.output_folder)
 
