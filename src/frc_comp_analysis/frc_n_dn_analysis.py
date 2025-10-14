@@ -11,16 +11,17 @@ from frc_comp_analysis.plot_frc import plot_frc, plot_all, plot_frc_sigma
 def check_args(args: object) -> None:
     arg_dict = vars(args)
 
-    if len(arg_dict) != 6:
-        raise ValueError("Missing an input argument.")
+    for arg in arg_dict.values():
+        if not arg:
+            raise TypeError("One or more required arguments are missing.")
 
     if not os.path.isdir(arg_dict["data_folder"]):
-        raise FileNotFoundError("Input file does not exist")
+        raise FileNotFoundError("Input folder does not exist")
 
     if not os.path.isdir(arg_dict["output_folder"]):
         raise FileNotFoundError("Output folder does not exist")
 
-    if not os.path.isdir(arg_dict["denoised_folder"]):
+    if not os.path.isdir(arg_dict["comp_folder"]):
         raise FileNotFoundError("Specified output folder does not exist.")
 
     if arg_dict["magnification"] <= 0:
@@ -39,7 +40,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--data_folder", type=str)
-    parser.add_argument("--denoised_folder", type=str)
+    parser.add_argument("--comp_folder", type=str)
     parser.add_argument("--output_folder", type=str)
     parser.add_argument("--magnification", type=float)
     parser.add_argument("--split_method", type=str)
@@ -50,7 +51,7 @@ def main():
     check_args(opt)
 
     noisy_data = io.load_reconstructions(opt.data_folder)
-    denoised_data = io.load_reconstructions(opt.denoised_folder)
+    denoised_data = io.load_reconstructions(opt.comp_folder)
 
     print("The noisy localisation files are: \n")
     print(noisy_data)
