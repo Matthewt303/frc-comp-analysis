@@ -9,9 +9,9 @@ Created on Fri Jun 20 11:33:22 2025
 import numpy as np
 import argparse
 import os
-import file_io as io
-from frc_calculation import frc_fixed
-from plot_frc import plot_frc_single, plot_all_single
+import FRC_analysis.file_io as io
+from FRC_analysis.frc_calculation import frc_fixed
+from FRC_analysis.plot_frc import plot_frc_single, plot_all_single
 
 
 def check_args(args: object):
