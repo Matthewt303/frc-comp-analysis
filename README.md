@@ -3,10 +3,7 @@
 frc-comp-analysis is library for end-to-end Fourier ring correlation analysis
 between two sets of single-molecule localization data or batch analysis for one set of localisation data. It is packaged as a python module that contains several command line scripts. 
 
-The FRC calculation is based on:
-[Nieuwenhuizen, R. P. J., Lidke, K. A., Bates, M., Puig, D. L., Grünwald, D.,
-Stallinga, S. & Rieger, B. Measuring image resolution in optical nanoscopy. *Nature
-Methods* **10**, 557–562 (2013).](https://www.nature.com/articles/nmeth.2448)
+The FRC calculation is based on [1](https://www.nature.com/articles/nmeth.2448):
 
 ## Prerequisites
 
@@ -50,16 +47,13 @@ batch-analysis --data_folder /path/to/data --output_folder /path/to/output --mag
 
 ## Parameters
 
-A brief summary of parameters is given here. A more detailed explanation is given by typing:
+A brief summary of parameters is given here:
 
-```bash
-comparative-analysis --help
-```
 - --magnification: scaling factor for super-resolution image. Between 0.05 to 0.20 is recommended
 - --split_method: how the dataset is split. Use 'simple' or 'odd_even'.
 - --criterion: threshold for determining resolution. Use 'fixed' or '3sigma'.
 
-For more detailed discussions on these parameters, please refer to the original paper.
+For more detailed discussions on these parameters, please refer to the original paper and also [2](https://www.nature.com/articles/s41377-023-01321-0).
 
 ## What to expect
 For comparative analysis, the module should calculate the FRC resolution for each
@@ -69,3 +63,14 @@ a dotplot with the FRC resolutions for both conditions along with summary statis
 
 Note, condition A is the 'control' and is designated 'noisy'. Condition B is designated
 as 'denoised'. Originally, the module was intended to evaluate denoising but it can be used for any comparative analysis.
+
+## References
+
+(1) Nieuwenhuizen, R. P. J., Lidke, K. A., Bates, M., Puig, D. L., Grünwald, D.,
+Stallinga, S. & Rieger, B. Measuring image resolution in optical nanoscopy. *Nature
+Methods* **10**, 557–562 (2013).
+
+(2) Zhao, W., Huang, X., Yang, J., Qu, L., Qiu, G., Zhao, Y., Wang, X., Su, D.,
+Ding, X., Mao, H., Jiu, Y., Hu, Y., Tan, J., Zhao, S., Pan, L., Chen, L. & Li,
+H. Quantitatively mapping local quality of super-resolution microscopy by rolling
+Fourier ring correlation. *Light: Science & Applications* **12**, 298 (2023)
