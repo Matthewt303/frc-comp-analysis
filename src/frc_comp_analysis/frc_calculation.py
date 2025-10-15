@@ -7,6 +7,7 @@ from scipy.signal import savgol_filter
 from scipy.stats import mannwhitneyu
 from numba import jit
 import time
+import os
 
 
 def bin_localizations(
@@ -30,7 +31,7 @@ def bin_localizations(
 
     """
 
-    locs = locs.copy()
+    locs = locs.view()
 
     locs = (locs + 0.5) * mag
 
@@ -180,9 +181,9 @@ def cpu_fft(image: "np.ndarray") -> "np.ndarray":
 
     """
 
-    im = image.copy()
+    im = image.view()
 
-    return fft2(im, workers=8).astype(np.complex64)
+    return fft2(im, workers=os.cpu_count() // 2).astype(np.complex64)
 
 
 def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
@@ -297,7 +298,7 @@ def calculate_frc_sigma(
 
 
 def smooth_savgol(frc: "np.ndarray") -> "np.ndarray":
-    frc_curve = frc.copy()
+    frc_curve = frc.view()
 
     interval = frc_curve.shape[0] // 20
 
