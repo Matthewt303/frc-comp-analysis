@@ -10,6 +10,33 @@ import time
 import os
 
 
+@jit(nopython=True, nogil=True, cache=False)
+def bin_image(locs: "np.ndarray", size: int) -> "np.ndarray":
+    """
+    Summary:
+
+    Bins localisation data into an image.
+    --------------------------------
+    Inputs:
+
+    locs - xy localisation data
+    size - Maximum dimensions (in pixels) of the image, determined by max xy position
+    --------------------------------
+    Output:
+    image - super-resolution image
+    """
+
+    image = np.zeros((size, size), dtype=np.float32)
+
+    for x, y in locs:
+        im_x, im_y = np.int32(x), np.int32(y)
+
+        if 0 <= im_x < size and 0 <= im_y < size:
+            image[im_x, im_y] += 1
+
+    return image
+
+
 def bin_localizations(
     locs: "np.ndarray", size: int = None, mag: float = 1
 ) -> "np.ndarray":
@@ -44,13 +71,7 @@ def bin_localizations(
 
     new_locs = locs[locs_to_keep]
 
-    image = np.zeros((size, size), dtype=np.float32)
-
-    for x, y in new_locs:
-        im_x, im_y = np.int32(x), np.int32(y)
-
-        if 0 <= im_x < size and 0 <= im_y < size:
-            image[im_x, im_y] += 1
+    image = bin_image(new_locs, size)
 
     return image
 
@@ -83,6 +104,7 @@ def apply_tukey_window(image: "np.ndarray", alpha: float = 0.5) -> "np.ndarray":
     return filt_image
 
 
+@jit(nopython=True, nogil=True, cache=False)
 def radial_count(image: "np.ndarray") -> np.ndarray:
     edge = int(image.shape[0] / 2)
 
