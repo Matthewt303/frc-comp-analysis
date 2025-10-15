@@ -37,7 +37,7 @@ def bin_localizations(
     x_locs, y_locs = locs[:, 0], locs[:, 1]
 
     if size is None:
-        size = np.int32(np.ceil(np.max(locs)))
+        size = np.int64(np.ceil(np.max(locs)))
 
     locs_to_keep = (x_locs >= 0) & (x_locs < size) & (y_locs >= 0) & (y_locs < size)
 
@@ -191,17 +191,17 @@ def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
     im1_tukey = apply_tukey_window(im1)
     im2_tukey = apply_tukey_window(im2)
 
-    print("starting FFT")
+    print("starting FFT \n")
     start = time.time()
 
     im1_ft = np.fft.fftshift(cpu_fft(im1_tukey)).astype(np.complex64)
     im2_ft = np.fft.fftshift(cpu_fft(im2_tukey)).astype(np.complex64)
 
     end = time.time()
-    print("FFT ended")
-    print("FFT took " + str(end - start) + " seconds")
+    print("FFT ended \n")
+    print("FFT took " + str(end - start) + " seconds \n")
 
-    print("Starting FRC calc")
+    print("Starting FRC calc \n")
     start2 = time.time()
 
     num = np.real(radial_sum_numba(im1_ft * np.conj(im2_ft)))
@@ -216,7 +216,7 @@ def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
 
     end2 = time.time()
     print("FRC calc done \n")
-    print("FRC calc took " + str(end2 - start2) + " seconds")
+    print("FRC calc took " + str(end2 - start2) + " seconds \n")
 
     return frc_curve[0:edge]
 
@@ -254,9 +254,13 @@ def calculate_frc(
     elif split_method == "odd_even":
         set1, set2 = split_odd_even(localisations)
 
+    print("starting image binning \n")
+    start = time.time()
     image1 = bin_localizations(set1, size=size, mag=magnification)
     image2 = bin_localizations(set2, size=size, mag=magnification)
     print("images binned")
+    end = time.time()
+    print(str(end - start) + " seconds \n")
 
     frc_vals = frc(image1, image2)
     x_pix = np.arange(len(frc_vals)) / image1.shape[0]

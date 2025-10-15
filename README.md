@@ -41,11 +41,10 @@ comparative-analysis.exe --data_folder \path\to\condition_A --comp_folder \path\
 --split_method odd_even --criterion fixed
 ```
 
-### As a python script
+For batch analysis:
 
-```python
-import frc-comp-analysis
-
+```bash
+batch-analysis --data_folder /path/to/data --output_folder /path/to/output --magnification 0.1 --split_method odd_even --criterion fixed
 ```
 
 ## Parameters

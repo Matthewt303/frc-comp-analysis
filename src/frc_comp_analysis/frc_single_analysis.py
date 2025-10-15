@@ -12,18 +12,14 @@ import os
 import frc_comp_analysis.file_io as io
 from frc_comp_analysis.frc_calculation import frc_fixed, frc_sigma
 import frc_comp_analysis.plot_frc as frcplt
-from frc_comp_analysis.plot_frc import (
-    plot_frc_single,
-    plot_all_single,
-    plot_frc_single_sigma,
-)
 
 
 def check_args(args: object):
     arg_dict = vars(args)
 
-    if len(arg_dict) != 4:
-        raise ValueError("Missing an input argument.")
+    for arg in arg_dict.values:
+        if not arg:
+            raise TypeError("One or more arguments missing.")
 
     if not os.path.isdir(arg_dict["data_folder"]):
         raise FileNotFoundError("Input file does not exist")

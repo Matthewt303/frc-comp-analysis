@@ -51,3 +51,4 @@ packages = ["src/frc_comp_analysis"]
 
 [project.scripts]
 comparative-analysis = "frc_comp_analysis.frc_n_dn_analysis:main"
+batch-analysis = "frc_comp_analysis.frc_single_analysis:main"
