@@ -17,7 +17,7 @@ import frc_comp_analysis.plot_frc as frcplt
 def check_args(args: object):
     arg_dict = vars(args)
 
-    for arg in arg_dict.values:
+    for arg in arg_dict.values():
         if not arg:
             raise TypeError("One or more arguments missing.")
 
