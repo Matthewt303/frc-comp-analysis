@@ -15,6 +15,7 @@ Methods* **10**, 557–562 (2013).](https://www.nature.com/articles/nmeth.2448)
 - Two folders with at least two SMLM localisation files in each folder for
 comparative analysis
 - OR one folder with at least two SMLM localisation files for comparative analysis
+- SMLM localisation file(s) as .csv, with frames, x, and y in columns 2, 3, and 4, respectively.
 
 ## Installation
 

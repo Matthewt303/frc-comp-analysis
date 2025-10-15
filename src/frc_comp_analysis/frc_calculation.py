@@ -322,7 +322,17 @@ def calculate_frc_resolution(
 def calculate_frc_res_sigma(
     frc: "np.ndarray", spatial_frequency: "np.ndarray", sigma_curve: "np.ndarray"
 ) -> float:
-    intercepts = np.argwhere(np.diff(np.sign(frc - sigma_curve))).flatten()
+    curve_below_one = sigma_curve[sigma_curve < 0.95]
+
+    curve_below_one_lowhigh = np.sort(curve_below_one)
+
+    curve_below_one_highlow = curve_below_one_lowhigh[::-1]
+
+    trunc_frc = frc[: int(curve_below_one_highlow.shape[0])]
+
+    intercepts = np.argwhere(
+        np.diff(np.sign(trunc_frc - curve_below_one_highlow))
+    ).flatten()
 
     resolution_spat_freq = spatial_frequency[intercepts][0]
 

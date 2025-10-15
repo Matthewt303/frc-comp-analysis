@@ -377,9 +377,7 @@ def plot_frc_single_sigma(
     fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
     ax.plot(v, frc, "darkmagenta", label="FRC", linewidth=4.5)
-    ax.plot(
-        v, sigma_curve, "royalblue", label=r"3-$\sigma$ curve denoised", linewidth=4.5
-    )
+    ax.plot(v, sigma_curve, "royalblue", label=r"3-$\sigma$ curve", linewidth=4.5)
     ax.plot(
         res_v, res_frc, "blueviolet", marker=".", markersize=24, markeredgecolor="k"
     )
