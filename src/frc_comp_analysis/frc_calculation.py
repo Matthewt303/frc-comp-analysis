@@ -54,7 +54,7 @@ def bin_localizations(
     --------------------------------
     Output:
 
-    image - super-resolution image
+    image - super-resolution image as a 2D array with dimensions of size x size.
 
     """
 
@@ -84,7 +84,7 @@ def apply_tukey_window(image: "np.ndarray", alpha: float = 0.5) -> "np.ndarray":
     --------------------------------
     Inputs:
 
-    image - the image
+    image - the image as a 2D array with dimensions N x N
     alpha - specifies the window over which to taper. Smaller alpha implies
     a smaller tapering window. Default value = 0.5
     --------------------------------
@@ -106,6 +106,23 @@ def apply_tukey_window(image: "np.ndarray", alpha: float = 0.5) -> "np.ndarray":
 
 @jit(nopython=True, nogil=True, cache=False)
 def radial_count(image: "np.ndarray") -> np.ndarray:
+    """
+    Summary:
+
+    Calculates the number of pixels bounded by the circles used for Fourier ring
+    correlation. The radii are calculated by first acquiring the indices of the image
+    and subtracting the center indices, resulting in an array centered at 0, 0 with
+    each pixel denoting the radius from the center.
+    --------------------------------
+    Inputs:
+
+    image - the image as an N x N 2D array.
+    --------------------------------
+    Output:
+
+    count - the number of pixels bound by each radius value.
+
+    """
     edge = int(image.shape[0] / 2)
 
     y, x = np.indices(image.shape)
@@ -127,12 +144,42 @@ def radial_count(image: "np.ndarray") -> np.ndarray:
 
 
 def calculate_sigma_curve(counts: "np.ndarray", sigma: int = 3) -> "np.ndarray":
+    """
+    Summary:
+
+    Calculates the 3-sigma curve for resolution evaluation.
+    --------------------------------
+    Inputs:
+
+    counts - 1D array containing the number of pixels bound by a circle of radius, q,
+    for each radius
+    --------------------------------
+    Output:
+
+    curve - 1D array of the three-sigma curve.
+
+    """
+
     curve = sigma / np.sqrt(counts / 2)
 
     return curve
 
 
 def calc_three_sigma(image: "np.ndarray") -> "np.ndarray":
+    """
+    Summary:
+
+    Function that combines radial_count and calculate_three_sigma_curve.
+    --------------------------------
+    Inputs:
+
+    image - the image as an N x N 2D array.
+    --------------------------------
+    Output:
+
+    three_sigma - 1D array of the three-sigma curve.
+
+    """
     radius_counts = radial_count(image)
 
     three_sigma = calculate_sigma_curve(radius_counts)
@@ -191,7 +238,9 @@ def cpu_fft(image: "np.ndarray") -> "np.ndarray":
     """
     Summary:
 
-    Calculates the 2D fast fourier transform of an image.
+    Calculates the 2D fast fourier transform of an image. The function uses half
+    of the available CPUs for the calculation, as specified by the 'workers'
+    keyword argument.
     --------------------------------
     Inputs:
 
@@ -209,6 +258,23 @@ def cpu_fft(image: "np.ndarray") -> "np.ndarray":
 
 
 def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
+    """
+    Summary:
+
+    Calculates the Fourier ring correlation curve from two half-images. The function
+    is composed of: apply_tukey_window, cpu_fft, and radial_sum_numba.
+    --------------------------------
+    Inputs:
+
+    im1 - 2D array of one half-image
+    im2 - 2D array of the second half-image
+    --------------------------------
+    Output:
+
+    frc_curve - Fourier ring correlation curve as 1D array.
+
+    """
+
     edge = int(im1.shape[0] / 2)
 
     im1_tukey = apply_tukey_window(im1)
