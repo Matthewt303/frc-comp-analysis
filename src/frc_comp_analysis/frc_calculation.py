@@ -310,7 +310,26 @@ def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
     return frc_curve[0:edge]
 
 
-def split_half_simple(localisations: "np.ndarray"):
+def split_half_simple(localisations: "np.ndarray") -> tuple["np.ndarray"]:
+
+    """
+    Summary:
+
+    Splits localization data into two halves at the halfway point. E.g. if there are
+    100000 localizations, locs[0:50000] forms one half while locs[50000:] forms the
+    second half. 
+    --------------------------------
+    Inputs:
+
+    localisations - N x 3 array, column order: frames, x, y.
+    --------------------------------
+    Output:
+
+    set1 - (N/2 x 2) array, column order: x, y. First half
+    set2 - (N/2 x 2) array, column order x, y. Second half
+
+    """
+
     halfway_point = localisations.shape[0] // 2
 
     set1 = localisations[0:halfway_point, 1:]
@@ -319,7 +338,25 @@ def split_half_simple(localisations: "np.ndarray"):
     return set1, set2
 
 
-def split_odd_even(localisations: "np.ndarray"):
+def split_odd_even(localisations: "np.ndarray") -> tuple["np.ndarray"]:
+
+    """
+    Summary:
+
+    Splits localization data into two halves based on whether the frame in which
+    it was localized was odd or even.
+    --------------------------------
+    Inputs:
+
+    localisations - N x 3 array, column order: frames, x, y.
+    --------------------------------
+    Output:
+
+    set1 - (N/2 x 2) array, column order: x, y. Odd frames
+    set2 - (N/2 x 2) array, column order x, y. Even frames
+
+    """
+
     odd_indices = np.where(localisations[:, 0] % 2 == 1)
     even_indices = np.where(localisations[:, 0] % 2 == 0)
 
@@ -330,8 +367,30 @@ def split_odd_even(localisations: "np.ndarray"):
 
 
 def calculate_frc(
-    localisations: "np.ndarray", split_method: str, magnification: float, size=None
-) -> "np.ndarray":
+    localisations: "np.ndarray", split_method: str, magnification: float, size: int=None
+) -> tuple["np.ndarray"]:
+    
+    """
+    Summary:
+
+    Composite function that splits the localisations into two halves, depending on
+    a user-defined option, bins the localisations, calculates the frc, and generates
+    an array of spatial frequencies over which the frc was calculated.
+    --------------------------------
+    Inputs:
+
+    localisations - N x 3 array, column order: frames, x, y.
+    split_method - user-defined. Either 'simple' or 'odd_even'
+    magnification - user-defined float that specifies the scaling of the binned image
+    size - integer that specifies the dimensions of the binned image.
+    --------------------------------
+    Output:
+
+    frc_vals - 1D array of Fourier ring correlation values
+    x_spatial_frequency - 1D array of spatial frequency values.
+
+    """
+
     if size is None:
         xy = magnification * localisations[:, 1:]
 
@@ -360,7 +419,29 @@ def calculate_frc(
 
 def calculate_frc_sigma(
     localisations: "np.ndarray", split_method: str, magnification: float, size=None
-) -> "np.ndarray":
+) -> tuple["np.ndarray"]:
+    """
+    Summary:
+
+    Composite function that splits the localisations into two halves, depending on
+    a user-defined option, bins the localisations, calculates the frc, and generates
+    an array of spatial frequencies over which the frc was calculated. The 3sigma
+    curve is also calculated.
+    --------------------------------
+    Inputs:
+
+    localisations - N x 3 array, column order: frames, x, y.
+    split_method - user-defined. Either 'simple' or 'odd_even'
+    magnification - user-defined float that specifies the scaling of the binned image
+    size - integer that specifies the dimensions of the binned image.
+    --------------------------------
+    Output:
+
+    frc_vals - 1D array of Fourier ring correlation values
+    x_spatial_frequency - 1D array of spatial frequency values.
+    three_sigma_curve - 1D array of 3sigma curve.
+
+    """
     if size is None:
         xy = magnification * localisations[:, 1:]
 
@@ -386,6 +467,23 @@ def calculate_frc_sigma(
 
 
 def smooth_savgol(frc: "np.ndarray") -> "np.ndarray":
+
+    """
+    Summary:
+
+    Smooths the FRC curve using a Savitzky-Gavol filter with a polynomial order
+    of 2 and over an interval that is 5 percent of the array length.
+    --------------------------------
+    Inputs:
+
+    frc - 1D array of Fourier ring correlation values
+    
+    --------------------------------
+    Output:
+
+    frc_smooth - 1D array of smoothed Fourier ring correlation values
+
+    """
     frc_curve = frc.view()
 
     interval = frc_curve.shape[0] // 20
@@ -397,7 +495,25 @@ def smooth_savgol(frc: "np.ndarray") -> "np.ndarray":
 
 def calculate_frc_resolution(
     frc: "np.ndarray", spatial_frequency: "np.ndarray", threshold=0.143
-) -> float:
+) -> tuple[float]:
+    """
+    Summary:
+
+    Calculates the FRC resolution by determining where the FRC curve intersects
+    the threshold of 0.143.
+    --------------------------------
+    Inputs:
+
+    frc - 1D array of Fourier ring correlation values
+    spatial_frequency - 1D array of spatial frequency values.
+    --------------------------------
+    Output:
+
+    resolution_spat_freq - the resolution in spatial frequency units
+    intercept_y_coord - the y-coordinate of the point of intersection.
+
+    """
+
     intercept = np.argwhere(np.diff(np.sign(frc - threshold))).flatten()
 
     resolution_spat_freq = spatial_frequency[intercept][0]
@@ -409,7 +525,26 @@ def calculate_frc_resolution(
 
 def calculate_frc_res_sigma(
     frc: "np.ndarray", spatial_frequency: "np.ndarray", sigma_curve: "np.ndarray"
-) -> float:
+) -> tuple[float]:
+    """
+    Summary:
+
+    Calculates the FRC resolution by determining where the FRC curve falls below
+    the three-sigma curve.
+    --------------------------------
+    Inputs:
+
+    frc - 1D array of Fourier ring correlation values
+    spatial_frequency - 1D array of spatial frequency values.
+    sigma_curve - 1D array of three-sigma curve.
+    --------------------------------
+    Output:
+
+    resolution_spat_freq - the resolution in spatial frequency units
+    intercept_y_coord - the y-coordinate of the point of intersection.
+
+    """
+
     curve_below_one = sigma_curve[sigma_curve < 0.95]
 
     curve_below_one_lowhigh = np.sort(curve_below_one)
@@ -429,7 +564,29 @@ def calculate_frc_res_sigma(
     return resolution_spat_freq, intercept_y_coord
 
 
-def frc_fixed(locs: "np.ndarray", magnification: float, split_method: str):
+def frc_fixed(locs: "np.ndarray", magnification: float, split_method: str
+              ) -> tuple["np.ndarray", "np.ndarray", float, float]:
+    """
+    Summary:
+
+    Main composite function that calculates the FRC curve, spatial frequency axis,
+    FRC resolution, and FRC value where the curve intersects with the threshold.
+    --------------------------------
+    Inputs:
+
+    locs- N x 3 array of localization data
+    magnification - user-defined float that specifies the scaling of the binned image
+    size - integer that specifies the dimensions of the binned image.
+    --------------------------------
+    Output:
+
+    frc_smoothed - 1D array of smoothed Fourier ring correlation values
+    x_spatial_frequency - 1D array of spatial frequency values.
+    1 / frc_res - FRC resolution in real space units
+    frc_res_val - FRC value where the curve intersects with the threshold
+
+    """
+
     frc_curve, spatial_freqs = calculate_frc(locs, split_method, magnification)
 
     frc_smoothed = smooth_savgol(frc_curve)
@@ -439,7 +596,30 @@ def frc_fixed(locs: "np.ndarray", magnification: float, split_method: str):
     return frc_smoothed, spatial_freqs, 1 / frc_res, frc_res_val
 
 
-def frc_sigma(locs: "np.ndarray", magnification: float, split_method: str):
+def frc_sigma(locs: "np.ndarray", magnification: float, split_method: str
+              ) -> tuple["np.ndarray", "np.ndarray", float, float, "np.ndarray"]:
+    """
+    Summary:
+
+    Main composite function that calculates the FRC curve, spatial frequency axis,
+    FRC resolution, FRC value where the curve intersects with the 3sigma curve, and
+    the 3sigma curve.
+    --------------------------------
+    Inputs:
+
+    locs- N x 3 array of localization data
+    magnification - user-defined float that specifies the scaling of the binned image
+    size - integer that specifies the dimensions of the binned image.
+    --------------------------------
+    Output:
+
+    frc_smoothed - 1D array of smoothed Fourier ring correlation values
+    x_spatial_frequency - 1D array of spatial frequency values.
+    1 / frc_res - FRC resolution in real space units
+    frc_res_val - FRC value where the curve intersects with the threshold
+    sig_curve - 1D array of 3sigma curve.
+
+    """
     frc_curve, spatial_freqs, sig_curve = calculate_frc_sigma(
         locs, split_method, magnification
     )
@@ -454,6 +634,23 @@ def frc_sigma(locs: "np.ndarray", magnification: float, split_method: str):
 
 
 def calculate_p_value(raw_frc: "np.ndarray", denoised_frc: "np.ndarray") -> float:
+    """
+    Summary:
+
+    Calculates the p-value from a Mann-Whitney U-test between the FRC values between
+    the noisy dataset and the denoised dataset. Test carried out at the 95-percent
+    significance value.
+    --------------------------------
+    Inputs:
+
+    raw_frc - FRC resolutions from the noisy dataset
+    denoised_frc - FRC resolutions from the denoised dataset.
+    --------------------------------
+    Output:
+
+    p_value - the p-value.
+
+    """
     test_result = mannwhitneyu(raw_frc, denoised_frc)
     p_value = test_result[1]
 
