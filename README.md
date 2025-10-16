@@ -16,9 +16,11 @@ comparative analysis
 
 ## Installation
 
-In an activated virtual environment:
+For use as a command-line script, create a virtual environment then run:
 ```shell
-pip install frc-comp-analysis
+git clone https://github.com/Matthewt303/frc-comp-analysis.git
+cd frc-comp-analysis
+python3 -m pip install .
 ```
 
 ## Usage
