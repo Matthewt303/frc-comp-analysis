@@ -22,6 +22,9 @@ git clone https://github.com/Matthewt303/frc-comp-analysis.git
 cd frc-comp-analysis
 python3 -m pip install .
 ```
+For Windows Powershell, use ```python``` instead of ```python3```.
+
+Following this ```comparative-analysis``` and ```batch-analysis``` should become available as scripts.
 
 ## Usage
 
