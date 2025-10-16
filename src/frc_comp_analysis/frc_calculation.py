@@ -311,13 +311,12 @@ def frc(im1: "np.ndarray", im2: "np.ndarray") -> "np.ndarray":
 
 
 def split_half_simple(localisations: "np.ndarray") -> tuple["np.ndarray"]:
-
     """
     Summary:
 
     Splits localization data into two halves at the halfway point. E.g. if there are
     100000 localizations, locs[0:50000] forms one half while locs[50000:] forms the
-    second half. 
+    second half.
     --------------------------------
     Inputs:
 
@@ -339,7 +338,6 @@ def split_half_simple(localisations: "np.ndarray") -> tuple["np.ndarray"]:
 
 
 def split_odd_even(localisations: "np.ndarray") -> tuple["np.ndarray"]:
-
     """
     Summary:
 
@@ -367,9 +365,11 @@ def split_odd_even(localisations: "np.ndarray") -> tuple["np.ndarray"]:
 
 
 def calculate_frc(
-    localisations: "np.ndarray", split_method: str, magnification: float, size: int=None
+    localisations: "np.ndarray",
+    split_method: str,
+    magnification: float,
+    size: int = None,
 ) -> tuple["np.ndarray"]:
-    
     """
     Summary:
 
@@ -467,7 +467,6 @@ def calculate_frc_sigma(
 
 
 def smooth_savgol(frc: "np.ndarray") -> "np.ndarray":
-
     """
     Summary:
 
@@ -477,7 +476,7 @@ def smooth_savgol(frc: "np.ndarray") -> "np.ndarray":
     Inputs:
 
     frc - 1D array of Fourier ring correlation values
-    
+
     --------------------------------
     Output:
 
@@ -564,8 +563,9 @@ def calculate_frc_res_sigma(
     return resolution_spat_freq, intercept_y_coord
 
 
-def frc_fixed(locs: "np.ndarray", magnification: float, split_method: str
-              ) -> tuple["np.ndarray", "np.ndarray", float, float]:
+def frc_fixed(
+    locs: "np.ndarray", magnification: float, split_method: str
+) -> tuple["np.ndarray", "np.ndarray", float, float]:
     """
     Summary:
 
@@ -596,8 +596,9 @@ def frc_fixed(locs: "np.ndarray", magnification: float, split_method: str
     return frc_smoothed, spatial_freqs, 1 / frc_res, frc_res_val
 
 
-def frc_sigma(locs: "np.ndarray", magnification: float, split_method: str
-              ) -> tuple["np.ndarray", "np.ndarray", float, float, "np.ndarray"]:
+def frc_sigma(
+    locs: "np.ndarray", magnification: float, split_method: str
+) -> tuple["np.ndarray", "np.ndarray", float, float, "np.ndarray"]:
     """
     Summary:
 
