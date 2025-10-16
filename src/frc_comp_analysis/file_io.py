@@ -11,7 +11,19 @@ import pandas as pd
 import numpy as np
 
 
-def load_reconstructions(folder_path: str) -> list:
+def load_reconstructions(folder_path: str) -> list[str]:
+    """
+    This function reads the folder where localization files are stored and converts
+    it into a list of file names where each file is the absolute path of a
+    localization table.
+    -----------------------
+    IN:
+    folder_path - the name of the folder
+    ----------------------
+    OUT:
+    reconstructions - list of absolute paths, sorted alphabetically.
+    ----------------------
+    """
     folder_files = os.listdir(folder_path)
 
     reconstructions = [
@@ -46,6 +58,22 @@ def load_localizations(file: str) -> "np.ndarray":
 def save_resolution(
     output_folder: str, resolution: float, datatype: str, index: int
 ) -> None:
+    """
+    This function saves the FRC resolution in a .txt file. The text changes
+    depending on whether the resolution is calculated from a 'noisy' (condition A)
+    or a 'denoised' (condition B) dataset.
+    -----------------------
+    IN:
+    output_folder - the name of the folder where the resolutions will be saved.
+    resolution - the FRC resolution in nanometers.
+    datatype - either 'noisy' or 'denoised'.
+    index - the dataset number.
+    ----------------------
+    OUT:
+    None - but a file is saved.
+    ----------------------
+    """
+
     fourier_space_res = np.float64(1 / resolution)
 
     if datatype == "noisy":
@@ -93,6 +121,19 @@ def save_resolution(
 def save_mean_frcs(
     raw_frc: "np.ndarray", denoised_frc: "np.ndarray", output_folder: str
 ) -> None:
+    """
+    This function saves the mean FRC resolution in a .txt file for the noisy data
+    and denoised data, as well as the standard deviation.
+    -----------------------
+    IN:
+    raw_frc - the FRC resolutions for condition A
+    denoised_frc - the FRC resolutions for condition B
+    output_folder - where the .txt files will be saved.
+    ----------------------
+    OUT:
+    None - but a file is saved.
+    ----------------------
+    """
     raw_mean, denoised_mean = np.mean(raw_frc), np.mean(denoised_frc)
     raw_sd, denoised_sd = np.std(raw_frc, ddof=1), np.std(denoised_frc, ddof=1)
 
@@ -119,6 +160,18 @@ def save_mean_frcs(
 
 
 def save_mean_frcs_single(frc: "np.ndarray", output_folder: str) -> None:
+    """
+    This function saves the mean FRC resolution in a .txt file for one set of data
+    as well as the standard deviation.
+    -----------------------
+    IN:
+    frc - the FRC resolutions
+    output_folder - where the .txt files will be saved.
+    ----------------------
+    OUT:
+    None - but a file is saved.
+    ----------------------
+    """
     all_mean = np.mean(frc)
     all_sd = np.std(frc, ddof=1)
 
@@ -129,6 +182,18 @@ def save_mean_frcs_single(frc: "np.ndarray", output_folder: str) -> None:
 
 
 def save_p_value(p_value: float, output_folder: str) -> None:
+    """
+    This function saves the p-value in a .txt file from a Mann-Whitney U-test
+    between the noisy FRC resolutions and the denoised FRC resolutions.
+    -----------------------
+    IN:
+    p_value - pvalue from the significance test
+    output_folder - where the .txt file will be saved.
+    ----------------------
+    OUT:
+    None - but a file is saved.
+    ----------------------
+    """
     with open(os.path.join(output_folder, "p_value.txt"), "w") as f:
         f.write("The p-value is: " + str(p_value))
 
@@ -136,10 +201,26 @@ def save_p_value(p_value: float, output_folder: str) -> None:
 def save_frc_results(
     raw_frc: "np.ndarray",
     denoised_frc: "np.ndarray",
-    raw_loc_files: list,
-    denoised_loc_files: list,
+    raw_loc_files: list[str],
+    denoised_loc_files: list[str],
     output_folder: str,
 ) -> "pd.DataFrame":
+    """
+    This function converts the FRC results into a pandas dataframe where the columns
+    are: file name, designation, and the FRC resolution. The dataframe is saved in the
+    output folder as a .csv file.
+    -----------------------
+    IN:
+    raw_frc - FRC resolutions from the noisy dataset
+    denoised_frc - FRC resolutions from the denoised dataset.
+    raw_loc_files - list of files for the noisy data
+    denoised_loc_files - list of files for the denoised data
+    output_folder - where the dataframe will be saved
+    ----------------------
+    OUT:
+    dataframe - pandas dataframe with the files, condition, and FRC resolutions.
+    ----------------------
+    """
     designate_raw, designate_denoised = (
         ["Noisy"] * len(raw_loc_files),
         ["Denoised"] * len(denoised_loc_files),
@@ -163,9 +244,23 @@ def save_frc_results(
 
 def save_frc_results_single(
     frcs: "np.ndarray",
-    loc_files: list,
+    loc_files: list[str],
     output_folder: str,
 ) -> "pd.DataFrame":
+    """
+    This function converts the FRC results into a pandas dataframe where the columns
+    are: file name and the FRC resolution. The dataframe is saved in the
+    output folder as a .csv file.
+    -----------------------
+    IN:
+    frc - FRC resolutions from the noisy dataset
+    loc_files - list of files for the data
+    output_folder - where the dataframe will be saved
+    ----------------------
+    OUT:
+    dataframe - pandas dataframe with the files, condition, and FRC resolutions.
+    ----------------------
+    """
     dataframe = pd.DataFrame(frcs, columns=["FRC resolution (nm)"])
 
     dataframe.insert(0, "Blank", [""] * len(loc_files))
