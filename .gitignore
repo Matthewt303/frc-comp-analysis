@@ -10,4 +10,5 @@ wheels/
 .venv
 
 # Personal scripts
-src/frc_comp_analysis/rfrc_analysis.py
+frc_comp_analysis/rfrc_analysis.py
+rfrc_analysis.py
