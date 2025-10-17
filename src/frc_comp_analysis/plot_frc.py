@@ -28,7 +28,31 @@ def plot_frc(
     index: int,
     threshold: float = 0.143,
 ) -> None:
-    """Needs changing"""
+    """
+    Summary:
+
+    Plots both the noisy and denoised FRC curves along with the threshold line and
+    points of intersection. Two graphs are saved in the output folder as a .png and
+    .svg file.
+    --------------------------------
+    Inputs:
+
+    frc_raw - 1D array of noisy, condition A Fourier ring correlation values
+    v_raw - 1D array of spatial frequency values from noisy, condition A data.
+    frc_denoised - 1D array of denoised, condition B Fourier ring correlation values.
+    v_denoised - 1D array of spatial frequency values from denoised, condition B data.
+    output_folder - where the plot will be saved. User-specified.
+    res_raw - FRC resolution of noisy data. In nanometers (real space)
+    res_raw_frc - FRC value where curve intersects threshold.
+    res_denoised - FRC resolution of denoised data. In nanometers (real space)
+    res_denoised_frc - FRC value where denoised curve intersects threshold.
+    index - the dataset number
+    threshold - default value 0.143.
+    --------------------------------
+    Output:
+    None - but two images are saved.
+
+    """
 
     threshold_plot = np.full(frc_raw.shape[0], threshold)
 
@@ -110,7 +134,25 @@ def plot_frc(
 
 
 def plot_all(all_data: "pd.DataFrame", output_folder: str) -> None:
-    """Boxplot or other"""
+    """
+    Summary:
+
+    Plots a dotplot of the mean FRC resolutions from the noisy data and denoised data.
+    The dotplot is saved in a user-specified output folder.
+    --------------------------------
+    Inputs:
+
+    all_data - a pandas Dataframe that contains three columns. The first column
+    specifies the file name, the second specifies the condition, and the third
+    specifies the FRC resolution in nanometers
+
+    output_folder - where the plot will be saved. User-specified.
+
+    --------------------------------
+    Output:
+    None - but two images are saved. One .png and one .svg.
+
+    """
 
     plt.ioff()
 
@@ -197,6 +239,33 @@ def plot_frc_sigma(
     sigma_curve_dn: "np.ndarray",
     index: int,
 ) -> None:
+    """
+    Summary:
+
+    Plots both the noisy and denoised FRC curves along with the three sigma curves and
+    points of intersection. Two graphs are saved in the output folder as a .png and
+    .svg file.
+    --------------------------------
+    Inputs:
+
+    frc_raw - 1D array of noisy, condition A Fourier ring correlation values
+    v_raw - 1D array of spatial frequency values from noisy, condition A data.
+    frc_denoised - 1D array of denoised, condition B Fourier ring correlation values.
+    v_denoised - 1D array of spatial frequency values from denoised, condition B data.
+    output_folder - where the plot will be saved. User-specified.
+    res_raw - FRC resolution of noisy data. In nanometers (real space)
+    res_raw_frc - FRC value where curve intersects threshold.
+    res_denoised - FRC resolution of denoised data. In nanometers (real space)
+    res_denoised_frc - FRC value where denoised curve intersects threshold.
+    sigma_curve_n - 1D array of the 3sigma curve from noisy data.
+    sigma_curve_dn - 1D array of the 3sigma curve from denoised data.
+    index - the dataset number
+    threshold - default value 0.143.
+    --------------------------------
+    Output:
+    None - but two images are saved.
+
+    """
     res_raw_v, res_dn_v = 1 / res_raw, 1 / res_denoised
 
     mpl.rcParams["font.sans-serif"] = ["Arial"]
@@ -296,6 +365,26 @@ def plot_frc_single(
     output_folder: str,
     threshold: float = 0.143,
 ) -> None:
+    """
+    Summary:
+
+    Plots a single FRC curve along with its point of intersection. Two graphs are
+    saved in the output folder as a .png and .svg file.
+    --------------------------------
+    Inputs:
+
+    frc - 1D array of Fourier ring correlation values
+    v - 1D array of spatial frequency values
+    res - FRC resolution. In nanometers (real space)
+    res_frc - FRC value where curve intersects threshold.
+    index - the dataset number
+    output_folder - where the plot will be saved. User-specified.
+    threshold - default value 0.143.
+    --------------------------------
+    Output:
+    None - but two images are saved.
+
+    """
     threshold_plot = np.full(frc.shape[0], threshold)
 
     res_v = 1 / res
@@ -368,6 +457,27 @@ def plot_frc_single_sigma(
     output_folder: str,
     sigma_curve: "np.ndarray",
 ) -> None:
+    """
+    Summary:
+
+    Plots the FRC curve along with the three sigma curve and point of intersection.
+    Two graphs are saved in the output folder as a .png and .svg file.
+    --------------------------------
+    Inputs:
+
+    frc - 1D array of Fourier ring correlation values
+    v - 1D array of spatial frequency values
+    res - FRC resolution. In nanometers (real space)
+    res_frc - FRC value where curve intersects threshold.
+    index - the dataset number
+    output_folder - where the plot will be saved. User-specified.
+    threshold - default value 0.143.
+    sigma_curve - 1D array of 3sigma curve.
+    --------------------------------
+    Output:
+    None - but two images are saved.
+
+    """
     res_v = 1 / res
 
     mpl.rcParams["font.sans-serif"] = ["Arial"]
@@ -430,6 +540,26 @@ def plot_frc_single_sigma(
 
 
 def plot_all_single(all_data: "pd.DataFrame", output_folder: str) -> None:
+    """
+    Summary:
+
+    Plots a dotplot of the mean FRC resolutions from the data.
+    The dotplot is saved in a user-specified output folder.
+    --------------------------------
+    Inputs:
+
+    all_data - a pandas Dataframe that contains three columns. The first column
+    specifies the file name, the second specifies the condition, and the third
+    specifies the FRC resolution in nanometers
+
+    output_folder - where the plot will be saved. User-specified.
+
+    --------------------------------
+    Output:
+    None - but two images are saved. One .png and one .svg.
+
+    """
+
     plt.ioff()
 
     mpl.rcParams["font.sans-serif"] = ["Arial"]

@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Personal scripts
+rfrc_analysis.py

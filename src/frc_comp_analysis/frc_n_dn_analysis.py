@@ -9,6 +9,15 @@ from frc_comp_analysis.plot_frc import plot_frc, plot_all, plot_frc_sigma
 
 
 def check_args(args: object) -> None:
+    """
+    Check user-specified arguments. Checks:
+    1) If arguments are missing.
+    2) Existence of input folders and output folder
+    3) Numerical validity of magnification
+    4) Validity of splitting method.
+    5) Validity of resolution criterion.
+    """
+
     arg_dict = vars(args)
 
     for arg in arg_dict.values():
