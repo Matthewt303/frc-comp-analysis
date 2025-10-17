@@ -28,7 +28,7 @@ Following this ```comparative-analysis``` and ```batch-analysis``` should become
 
 ## Usage
 
-### Command-line interface
+### Command-line
 
 It is recommended to run the analysis as a command line script. It can be run as:
 
