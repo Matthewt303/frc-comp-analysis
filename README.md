@@ -1,6 +1,6 @@
 ## Overview
 
-frc-comp-analysis is library for end-to-end Fourier ring correlation analysis
+frc-comp-analysis is a library for end-to-end Fourier ring correlation analysis
 between two sets of single-molecule localization data or batch analysis for one set of localisation data. It is packaged as a python module that contains several command line scripts. 
 
 The FRC calculation is based on [1](https://www.nature.com/articles/nmeth.2448):
