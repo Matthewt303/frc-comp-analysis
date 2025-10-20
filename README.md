@@ -33,15 +33,13 @@ Following this ```comparative-analysis``` and ```batch-analysis``` should become
 It is recommended to run the analysis as a command line script. It can be run as:
 
 ```bash
-comparative-analysis --data_folder /path/to/condition_A --comp_folder /path/to/condition_B --output_folder /path/to/output --magnification 0.1 
---split_method odd_even --criterion fixed
+comparative-analysis --data_folder /path/to/condition_A --comp_folder /path/to/condition_B --output_folder /path/to/output --condition_A condA --condition_B condB --magnification 0.1 --split_method odd_even --criterion fixed
 ```
 
 Alternatively, in powershell:
 
 ```powershell
-comparative-analysis.exe --data_folder \path\to\condition_A --comp_folder \path\to\condition_B --output_folder \path\to\output --magnification 0.1 
---split_method odd_even --criterion fixed
+comparative-analysis.exe --data_folder \path\to\condition_A --comp_folder \path\to\condition_B --output_folder \path\to\output --condition_A condA --condition_B condB --magnification 0.1 --split_method odd_even --criterion fixed
 ```
 
 For batch analysis:
@@ -54,6 +52,8 @@ batch-analysis --data_folder /path/to/data --output_folder /path/to/output --mag
 
 A brief summary of parameters is given here:
 
+- --condition_A: name of experimental setting for first dataset.
+- --condition_B: name of experimental setting for second dataset.
 - --magnification: scaling factor for super-resolution image. Between 0.05 to 0.20 is recommended
 - --split_method: how the dataset is split. Use 'simple' or 'odd_even'.
 - --criterion: threshold for determining resolution. Use 'fixed' or '3sigma'.
@@ -66,8 +66,7 @@ localization file in both folders. It also generates publication-quality plots f
 each pair of localization files as .png files and .svg files. Finally, it generates 
 a dotplot with the FRC resolutions for both conditions along with summary statistics and the p-value from a Mann-Whitney U-test to assess for significant change in FRC resolutions between condition A and condition B.
 
-Note, condition A is the 'control' and is designated 'noisy'. Condition B is designated
-as 'denoised'. Originally, the module was intended to evaluate denoising but it can be used for any comparative analysis.
+In terms of performance, the module is fairly fast owing to the usage of Numba to speed up the computation-intensive functions. Depending on the size and number of files, the runtime should range anywhere between tens of seconds to a couple of minutes.
 
 ## References
 
