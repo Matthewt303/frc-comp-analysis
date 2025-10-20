@@ -171,7 +171,7 @@ def main():
         noisy_data,
         denoised_data,
         opt.condition_A,
-        opt.conditiion_B,
+        opt.condition_B,
         opt.output_folder,
     )
 

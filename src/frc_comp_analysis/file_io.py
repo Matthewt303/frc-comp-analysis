@@ -86,7 +86,7 @@ def save_resolution(
     if datatype == "cond_a":
         with open(
             os.path.join(
-                output_folder, +condition_a + "_resolution_" + str(index) + ".txt"
+                output_folder, condition_a + "_resolution_" + str(index) + ".txt"
             ),
             "w",
         ) as f:
@@ -113,7 +113,7 @@ def save_resolution(
     elif datatype == "cond_b":
         with open(
             os.path.join(
-                output_folder, +condition_b + "_resolution_" + str(index) + ".txt"
+                output_folder, condition_b + "_resolution_" + str(index) + ".txt"
             ),
             "w",
         ) as f:
