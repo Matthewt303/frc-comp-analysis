@@ -56,7 +56,12 @@ def load_localizations(file: str) -> "np.ndarray":
 
 
 def save_resolution(
-    output_folder: str, resolution: float, datatype: str, index: int
+    output_folder: str,
+    resolution: float,
+    datatype: str,
+    index: int,
+    condition_a: str,
+    condition_b: str,
 ) -> None:
     """
     This function saves the FRC resolution in a .txt file. The text changes
@@ -66,8 +71,10 @@ def save_resolution(
     IN:
     output_folder - the name of the folder where the resolutions will be saved.
     resolution - the FRC resolution in nanometers.
-    datatype - either 'noisy' or 'denoised'.
+    datatype - either 'cond_a' or 'cond_b'.
     index - the dataset number.
+    condition_a - the designation for the control.
+    condition_b - the designation for the test data.
     ----------------------
     OUT:
     None - but a file is saved.
@@ -76,12 +83,17 @@ def save_resolution(
 
     fourier_space_res = np.float64(1 / resolution)
 
-    if datatype == "noisy":
+    if datatype == "cond_a":
         with open(
-            os.path.join(output_folder, "noisy_resolution_" + str(index) + ".txt"), "w"
+            os.path.join(
+                output_folder, +condition_a + "_resolution_" + str(index) + ".txt"
+            ),
+            "w",
         ) as f:
             f.write(
-                "The real space resolution of noisy dataset "
+                "The real space resolution of "
+                + condition_a
+                + " dataset "
                 + str(index)
                 + " is: "
                 + str(resolution)
@@ -89,20 +101,26 @@ def save_resolution(
             )
 
             f.write(
-                "The corresponding fourier resolution of noisy dataset "
+                "The corresponding fourier resolution of "
+                + condition_a
+                + " dataset "
                 + str(index)
                 + " is: "
                 + str(fourier_space_res)
                 + " nm^-1 "
             )
 
-    elif datatype == "denoised":
+    elif datatype == "cond_b":
         with open(
-            os.path.join(output_folder, "denoised_resolution_" + str(index) + ".txt"),
+            os.path.join(
+                output_folder, +condition_b + "_resolution_" + str(index) + ".txt"
+            ),
             "w",
         ) as f:
             f.write(
-                "The real space resolution of denoised dataset "
+                "The real space resolution of "
+                + condition_b
+                + " dataset "
                 + str(index)
                 + " is: "
                 + str(resolution)
@@ -110,7 +128,9 @@ def save_resolution(
             )
 
             f.write(
-                "The corresponding fourier resolution if noisy dataset "
+                "The corresponding fourier resolution of "
+                + condition_b
+                + " dataset "
                 + str(index)
                 + " is: "
                 + str(fourier_space_res)
@@ -119,7 +139,11 @@ def save_resolution(
 
 
 def save_mean_frcs(
-    raw_frc: "np.ndarray", denoised_frc: "np.ndarray", output_folder: str
+    raw_frc: "np.ndarray",
+    denoised_frc: "np.ndarray",
+    cond_a: str,
+    cond_b: str,
+    output_folder: str,
 ) -> None:
     """
     This function saves the mean FRC resolution in a .txt file for the noisy data
@@ -128,6 +152,8 @@ def save_mean_frcs(
     IN:
     raw_frc - the FRC resolutions for condition A
     denoised_frc - the FRC resolutions for condition B
+    cond_a - the designation for the control.
+    cond_b - the designation for the test data.
     output_folder - where the .txt files will be saved.
     ----------------------
     OUT:
@@ -139,21 +165,31 @@ def save_mean_frcs(
 
     with open(os.path.join(output_folder, "mean_frcs.txt"), "w") as f:
         f.write(
-            "The mean FRC resolution for non-denoised data is: "
+            "The mean FRC resolution for "
+            + cond_a
+            + " data is: "
             + str(raw_mean)
             + " nm \n"
         )
         f.write(
-            "The mean FRC resolution for denoised data is: "
+            "The mean FRC resolution for "
+            + cond_b
+            + " data is: "
             + str(denoised_mean)
             + " nm \n"
         )
 
         f.write(
-            "The standard deviation for non-denoised data is: " + str(raw_sd) + " nm \n"
+            "The standard deviation for "
+            + cond_a
+            + " data is: "
+            + str(raw_sd)
+            + " nm \n"
         )
         f.write(
-            "The standard deviation for denoised data is: "
+            "The standard deviation for "
+            + cond_b
+            + " data is: "
             + str(denoised_sd)
             + " nm \n"
         )
@@ -203,6 +239,8 @@ def save_frc_results(
     denoised_frc: "np.ndarray",
     raw_loc_files: list[str],
     denoised_loc_files: list[str],
+    cond_a: str,
+    cond_b: str,
     output_folder: str,
 ) -> "pd.DataFrame":
     """
@@ -214,7 +252,9 @@ def save_frc_results(
     raw_frc - FRC resolutions from the noisy dataset
     denoised_frc - FRC resolutions from the denoised dataset.
     raw_loc_files - list of files for the noisy data
-    denoised_loc_files - list of files for the denoised data
+    denoised_loc_files - list of files for the denoised data.
+    cond_a - the designation for the control.
+    cond_b - the designation for the test data.
     output_folder - where the dataframe will be saved
     ----------------------
     OUT:
@@ -222,8 +262,8 @@ def save_frc_results(
     ----------------------
     """
     designate_raw, designate_denoised = (
-        ["Noisy"] * len(raw_loc_files),
-        ["Denoised"] * len(denoised_loc_files),
+        [cond_a] * len(raw_loc_files),
+        [cond_b] * len(denoised_loc_files),
     )
 
     designations = designate_raw + designate_denoised

@@ -25,6 +25,8 @@ def plot_frc(
     res_raw_frc: float,
     res_denoised: float,
     res_denoised_frc: float,
+    cond_a: str,
+    cond_b: str,
     index: int,
     threshold: float = 0.143,
 ) -> None:
@@ -46,6 +48,8 @@ def plot_frc(
     res_raw_frc - FRC value where curve intersects threshold.
     res_denoised - FRC resolution of denoised data. In nanometers (real space)
     res_denoised_frc - FRC value where denoised curve intersects threshold.
+    cond_a - the designation for the control.
+    cond_b - the designation for the test data.
     index - the dataset number
     threshold - default value 0.143.
     --------------------------------
@@ -64,8 +68,8 @@ def plot_frc(
 
     fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
-    ax.plot(v_raw, frc_raw, "darkmagenta", label="Original", linewidth=4.5)
-    ax.plot(v_denoised, frc_denoised, "salmon", label="Denoised", linewidth=4.5)
+    ax.plot(v_raw, frc_raw, "darkmagenta", label=cond_a, linewidth=4.5)
+    ax.plot(v_denoised, frc_denoised, "salmon", label=cond_b, linewidth=4.5)
     ax.plot(v_raw, threshold_plot, "royalblue", label="Threshold", linewidth=4.5)
     ax.plot(
         res_raw_v,
@@ -237,6 +241,8 @@ def plot_frc_sigma(
     res_denoised_frc: float,
     sigma_curve_n: "np.ndarray",
     sigma_curve_dn: "np.ndarray",
+    cond_a: str,
+    cond_b: str,
     index: int,
 ) -> None:
     """
@@ -259,8 +265,9 @@ def plot_frc_sigma(
     res_denoised_frc - FRC value where denoised curve intersects threshold.
     sigma_curve_n - 1D array of the 3sigma curve from noisy data.
     sigma_curve_dn - 1D array of the 3sigma curve from denoised data.
+    cond_a - the designation for the control.
+    cond_b - the designation for the test data.
     index - the dataset number
-    threshold - default value 0.143.
     --------------------------------
     Output:
     None - but two images are saved.
@@ -274,20 +281,20 @@ def plot_frc_sigma(
 
     fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
-    ax.plot(v_raw, frc_raw, "darkmagenta", label="Noisy", linewidth=4.5)
-    ax.plot(v_denoised, frc_denoised, "salmon", label="Denoised", linewidth=4.5)
+    ax.plot(v_raw, frc_raw, "darkmagenta", label=cond_a, linewidth=4.5)
+    ax.plot(v_denoised, frc_denoised, "salmon", label=cond_b, linewidth=4.5)
     ax.plot(
         v_raw,
         sigma_curve_n,
         "royalblue",
-        label=r"3-$\sigma$ curve noisy",
+        label=r"3-$\sigma$ curve " + cond_a,
         linewidth=4.5,
     )
     ax.plot(
         v_denoised,
         sigma_curve_dn,
         "lightseagreen",
-        label=r"3-$\sigma$ curve denoised",
+        label=r"3-$\sigma$ curve " + cond_b,
         linewidth=4.5,
     )
     ax.plot(

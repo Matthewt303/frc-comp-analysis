@@ -33,6 +33,12 @@ def check_args(args: object) -> None:
     if not os.path.isdir(arg_dict["comp_folder"]):
         raise FileNotFoundError("Specified output folder does not exist.")
 
+    if not isinstance(arg_dict["condition_A"], str):
+        raise TypeError("Condition A must be a string.")
+
+    if not isinstance(arg_dict["condition_B"], str):
+        raise TypeError("Condition B must be a string.")
+
     if arg_dict["magnification"] <= 0:
         raise ValueError("Magnification cannot be zero or negative")
 
@@ -51,6 +57,8 @@ def main():
     parser.add_argument("--data_folder", type=str)
     parser.add_argument("--comp_folder", type=str)
     parser.add_argument("--output_folder", type=str)
+    parser.add_argument("--condition_A", type=str)
+    parser.add_argument("--condition_B", type=str)
     parser.add_argument("--magnification", type=float)
     parser.add_argument("--split_method", type=str)
     parser.add_argument("--criterion", type=str)
@@ -96,6 +104,8 @@ def main():
                 frc_res_noisy,
                 res_denoised,
                 frc_res_denoised,
+                opt.condition_A,
+                opt.condition_B,
                 index=i + 1,
             )
 
@@ -124,21 +134,45 @@ def main():
                 frc_res_denoised,
                 sig_curve,
                 sig_curve_dn,
+                opt.condition_A,
+                opt.condition_B,
                 index=i + 1,
             )
 
         noisy_frcs[i, 0] = res_noisy
         denoised_frcs[i, 0] = res_denoised
 
-        io.save_resolution(opt.output_folder, res_noisy, "n", index=i + 1)
-        io.save_resolution(opt.output_folder, res_denoised, "dn", index=i + 1)
+        io.save_resolution(
+            opt.output_folder,
+            res_noisy,
+            "cond_a",
+            index=i + 1,
+            condition_a=opt.condition_A,
+            condition_b=opt.condition_B,
+        )
+        io.save_resolution(
+            opt.output_folder,
+            res_denoised,
+            "cond_b",
+            index=i + 1,
+            condition_a=opt.condition_A,
+            condition_b=opt.condition_B,
+        )
 
         print("Processed dataset " + str(i + 1) + "\n")
 
-    io.save_mean_frcs(noisy_frcs, denoised_frcs, opt.output_folder)
+    io.save_mean_frcs(
+        noisy_frcs, denoised_frcs, opt.condition_A, opt.condition_B, opt.output_folder
+    )
 
     all_data = io.save_frc_results(
-        noisy_frcs, denoised_frcs, noisy_data, denoised_data, opt.output_folder
+        noisy_frcs,
+        denoised_frcs,
+        noisy_data,
+        denoised_data,
+        opt.condition_A,
+        opt.conditiion_B,
+        opt.output_folder,
     )
 
     p_value_test = calculate_p_value(noisy_frcs, denoised_frcs)
