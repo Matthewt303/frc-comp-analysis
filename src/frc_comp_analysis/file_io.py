@@ -11,6 +11,25 @@ import pandas as pd
 import numpy as np
 
 
+def write_args(args: object, out: str) -> None:
+    """
+    Saves arguments as a .txt folder.
+    -----------------------
+    IN:
+    args - user-specified input arguments
+    out - the folder path where the .txt file will be saved
+    ----------------------
+    OUT:
+    None
+    ----------------------
+    """
+    arg_dict = vars(args)
+
+    with open(os.path.join(out, "arguments.txt"), "w") as f:
+        for arg, arg_val in zip(arg_dict.keys(), arg_dict.values()):
+            f.write("The " + arg + " is " + str(arg_val) + "\n")
+
+
 def load_reconstructions(folder_path: str) -> list[str]:
     """
     This function reads the folder where localization files are stored and converts

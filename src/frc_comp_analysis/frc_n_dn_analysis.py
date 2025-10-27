@@ -64,6 +64,7 @@ def main():
     parser.add_argument("--criterion", type=str)
 
     opt = parser.parse_args()
+    io.write_args(opt, opt.output_folder)
 
     check_args(opt)
 
