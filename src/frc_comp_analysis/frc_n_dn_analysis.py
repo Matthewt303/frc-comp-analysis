@@ -16,6 +16,7 @@ def check_args(args: object) -> None:
     3) Numerical validity of magnification
     4) Validity of splitting method.
     5) Validity of resolution criterion.
+    6) Validity of data relationship.
     """
 
     arg_dict = vars(args)
@@ -42,13 +43,18 @@ def check_args(args: object) -> None:
     if arg_dict["magnification"] <= 0:
         raise ValueError("Magnification cannot be zero or negative")
 
-    if arg_dict["split_method"] not in ("simple", "odd_even"):
+    if arg_dict["split_method"] not in ("simple", "odd_even", "Simple"):
         raise NameError(
             'Invalid data splitting method. Use either "simple" or "odd_even"'
         )
 
-    if arg_dict["criterion"] not in ("fixed", "3sigma"):
+    if arg_dict["criterion"] not in ("fixed", "3sigma", "Fixed"):
         raise NameError('Invalid resolution criterion. Use only "fixed" or "3sigma"')
+
+    if arg_dict["relation"] not in ("Independent", "independent", "Paired", "paired"):
+        raise NameError(
+            "Invalid relation between data. Use only 'independent' or 'paired'."
+        )
 
 
 def main():
@@ -62,6 +68,7 @@ def main():
     parser.add_argument("--magnification", type=float)
     parser.add_argument("--split_method", type=str)
     parser.add_argument("--criterion", type=str)
+    parser.add_argument("--relation", type=str)
 
     opt = parser.parse_args()
     io.write_args(opt, opt.output_folder)
@@ -176,7 +183,7 @@ def main():
         opt.output_folder,
     )
 
-    p_value_test = calculate_p_value(noisy_frcs, denoised_frcs)
+    p_value_test = calculate_p_value(noisy_frcs, denoised_frcs, opt.relation)
     io.save_p_value(p_value_test, opt.output_folder)
 
     plot_all(all_data, opt.output_folder)

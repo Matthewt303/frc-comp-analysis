@@ -4,7 +4,7 @@ import numpy as np
 from scipy.fft import fft2
 from scipy.signal.windows import tukey
 from scipy.signal import savgol_filter
-from scipy.stats import mannwhitneyu
+from scipy.stats import mannwhitneyu, wilcoxon
 from numba import jit
 import time
 import os
@@ -634,25 +634,35 @@ def frc_sigma(
     return frc_smoothed, spatial_freqs, 1 / frc_res, frc_res_val, sig_curve
 
 
-def calculate_p_value(raw_frc: "np.ndarray", denoised_frc: "np.ndarray") -> float:
+def calculate_p_value(
+    raw_frc: "np.ndarray", denoised_frc: "np.ndarray", relation: str
+) -> float:
     """
     Summary:
 
-    Calculates the p-value from a Mann-Whitney U-test between the FRC values between
-    the noisy dataset and the denoised dataset. Test carried out at the 95-percent
-    significance value.
+    Calculates the p-value from a Mann-Whitney U-test or Wilcoxon signed rank test
+    between the FRC values between the noisy dataset and the denoised dataset.
+    Test carried out at the 95-percent significance value. Choice of test depends on
+    whether the data are paired or independent.
     --------------------------------
     Inputs:
 
     raw_frc - FRC resolutions from the noisy dataset
     denoised_frc - FRC resolutions from the denoised dataset.
+    relation - relation between the datasets, independent or paired.
     --------------------------------
     Output:
 
     p_value - the p-value.
 
     """
-    test_result = mannwhitneyu(raw_frc, denoised_frc)
-    p_value = test_result[1]
+
+    if relation == "independent":
+        test_result = mannwhitneyu(raw_frc, denoised_frc)
+        p_value = test_result[1]
+
+    elif relation == "paired":
+        test_result = wilcoxon(raw_frc, denoised_frc)
+        p_value = test_result[1]
 
     return p_value

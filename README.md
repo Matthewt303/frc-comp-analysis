@@ -33,13 +33,13 @@ Following this ```comparative-analysis``` and ```batch-analysis``` should become
 It is recommended to run the analysis as a command line script. It can be run as:
 
 ```bash
-comparative-analysis --data_folder /path/to/condition_A --comp_folder /path/to/condition_B --output_folder /path/to/output --condition_A condA --condition_B condB --magnification 0.1 --split_method odd_even --criterion fixed
+comparative-analysis --data_folder /path/to/condition_A --comp_folder /path/to/condition_B --output_folder /path/to/output --condition_A condA --condition_B condB --magnification 0.1 --split_method odd_even --criterion fixed --relation paired
 ```
 
 Alternatively, in powershell:
 
 ```powershell
-comparative-analysis.exe --data_folder \path\to\condition_A --comp_folder \path\to\condition_B --output_folder \path\to\output --condition_A condA --condition_B condB --magnification 0.1 --split_method odd_even --criterion fixed
+comparative-analysis.exe --data_folder \path\to\condition_A --comp_folder \path\to\condition_B --output_folder \path\to\output --condition_A condA --condition_B condB --magnification 0.1 --split_method odd_even --criterion fixed --relation paired
 ```
 
 For batch analysis:
@@ -57,6 +57,7 @@ A brief summary of parameters is given here:
 - --magnification: scaling factor for super-resolution image. Between 0.05 to 0.20 is recommended
 - --split_method: how the dataset is split. Use 'simple' or 'odd_even'.
 - --criterion: threshold for determining resolution. Use 'fixed' or '3sigma'.
+- --relation: whether the data from each condition are paired or independent. For independent data, the Mann-Whitney U-test is used while for paired data, the Wilcoxon Signed-Rank test is used.
 
 For more detailed discussions on these parameters, please refer to the original paper and also [2](https://www.nature.com/articles/s41377-023-01321-0).
 
@@ -64,7 +65,7 @@ For more detailed discussions on these parameters, please refer to the original 
 For comparative analysis, the module should calculate the FRC resolution for each
 localization file in both folders. It also generates publication-quality plots for
 each pair of localization files as .png files and .svg files. Finally, it generates 
-a dotplot with the FRC resolutions for both conditions along with summary statistics and the p-value from a Mann-Whitney U-test to assess for significant change in FRC resolutions between condition A and condition B.
+a dotplot with the FRC resolutions for both conditions along with summary statistics and a p-value to assess for significant change in FRC resolutions between condition A and condition B.
 
 In terms of performance, the module is fairly fast owing to the usage of Numba to speed up the computation-intensive functions. Depending on the size and number of files, the runtime should range anywhere between tens of seconds to a couple of minutes.
 
