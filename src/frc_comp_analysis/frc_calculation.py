@@ -563,11 +563,18 @@ def calculate_frc_res_sigma(
         np.diff(np.sign(trunc_frc - curve_below_one_highlow))
     ).flatten()
 
-    resolution_spat_freq = spatial_frequency[intercepts][0]
+    if not spatial_frequency[intercepts].size > 0:
+        raise ValueError(
+            "FRC curve does not intersect threshold!"
+            "Try again with a different splitting method."
+        )
 
-    intercept_y_coord = frc[intercepts][0]
+    else:
+        resolution_spat_freq = spatial_frequency[intercepts][0]
 
-    return resolution_spat_freq, intercept_y_coord
+        intercept_y_coord = frc[intercepts][0]
+
+        return resolution_spat_freq, intercept_y_coord
 
 
 def frc_fixed(
