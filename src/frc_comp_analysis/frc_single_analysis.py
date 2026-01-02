@@ -92,7 +92,7 @@ def main():
 
         frcs[i, 0] = res
 
-        io.save_resolution(opt.output_folder, res, "noisy", index=i + 1)
+        io.save_resolution_single(opt.output_folder, res, index=i + 1)
 
         print("Processed dataset " + str(i + 1) + "\n")
 
