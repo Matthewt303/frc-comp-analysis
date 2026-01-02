@@ -73,6 +73,42 @@ def load_localizations(file: str) -> "np.ndarray":
 
     return np.array(loc_data).astype(np.float32)
 
+def save_resolution_single(
+    output_folder: str,
+    resolution: float,
+    index: int,
+) -> None:
+    """
+    This function saves the FRC resolution in a .txt file.
+    -----------------------
+    IN:
+    output_folder - the name of the folder where the resolutions will be saved.
+    resolution - the FRC resolution in nanometers.
+    index - the dataset number.
+    ----------------------
+    OUT:
+    None - but a file is saved.
+    ----------------------
+    """
+
+    fourier_space_res = 1 / resolution
+
+    with open(os.path.join(output_folder, str(index) + "_resolution.txt"), "w") as f:
+        f.write(
+            "The real space resolution of dataset "
+            + str(index)
+            + " is "
+            + str(resolution)
+            + " nm \n"
+        )
+
+        f.write(
+            "The corresponding fourier space resolution of dataset "
+            + str(index)
+            + " is: "
+            + str(fourier_space_res)
+            + " nm^-1"
+        )
 
 def save_resolution(
     output_folder: str,
