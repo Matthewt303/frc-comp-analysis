@@ -43,9 +43,15 @@ def check_args(args: object) -> None:
     if arg_dict["magnification"] <= 0:
         raise ValueError("Magnification cannot be zero or negative")
 
-    if arg_dict["split_method"] not in ("simple", "odd_even", "Simple"):
+    if arg_dict["split_method"] not in (
+        "simple",
+        "odd_even",
+        "Simple",
+        "Random",
+        "random",
+    ):
         raise NameError(
-            'Invalid data splitting method. Use either "simple" or "odd_even"'
+            'Invalid data splitting method. Use either "simple", "odd_even", or "random"'
         )
 
     if arg_dict["criterion"] not in ("fixed", "3sigma", "Fixed"):

@@ -73,6 +73,7 @@ def load_localizations(file: str) -> "np.ndarray":
 
     return np.array(loc_data).astype(np.float32)
 
+
 def save_resolution_single(
     output_folder: str,
     resolution: float,
@@ -109,6 +110,7 @@ def save_resolution_single(
             + str(fourier_space_res)
             + " nm^-1"
         )
+
 
 def save_resolution(
     output_folder: str,

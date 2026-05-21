@@ -32,7 +32,7 @@ def bin_image(locs: "np.ndarray", size: int) -> "np.ndarray":
         im_x, im_y = np.int32(x), np.int32(y)
 
         if 0 <= im_x < size and 0 <= im_y < size:
-            image[im_x, im_y] += 1
+            image[im_y, im_x] += 1
 
     return image
 
@@ -364,6 +364,48 @@ def split_odd_even(localisations: "np.ndarray") -> tuple["np.ndarray"]:
     return set1, set2
 
 
+def split_random_blocks(
+    localisations: "np.ndarray", nblocks: int = 50, seed=None
+) -> tuple["np.ndarray"]:
+    """
+    Summary:
+
+    Splits localization data into two halves by dividing the data into 50 blocks
+    and shuffling the order of the blocks.
+    --------------------------------
+    Inputs:
+
+    localisations - N x 3 array, column order: frames, x, y.
+    nblocks - The mumber of time blocks.
+    seed - optional random seed for reproducibility.
+    --------------------------------
+    Output:
+
+    set1 - (N/2 x 2) array, column order: x, y. First half of blocks.
+    set2 - (N/2 x 2) array, column order x, y. Second half of blocks
+
+    """
+
+    n = localisations.shape[0]
+    xy = localisations[:, 1:]
+
+    rng = np.random.default_rng(seed)
+
+    # Randomly choose half of the blocks
+    blocksel = rng.permutation(nblocks)[: int(np.ceil(nblocks / 2))]
+
+    # Assign each localization to a block based on row index
+    blocks = np.ceil(np.arange(0, n) / n * nblocks).astype(int)
+
+    # Mask for first half-dataset
+    mask = np.isin(blocks, blocksel)
+
+    set1 = xy[mask]
+    set2 = xy[~mask]
+
+    return set1, set2
+
+
 def calculate_frc(
     localisations: "np.ndarray",
     split_method: str,
@@ -401,6 +443,11 @@ def calculate_frc(
 
     elif split_method == "odd_even":
         set1, set2 = split_odd_even(localisations)
+
+    elif split_method == "random":
+        set1, set2 = split_random_blocks(localisations, 25)
+        print(set1)
+        print(set2)
 
     print("starting image binning \n")
     start = time.time()
@@ -452,6 +499,9 @@ def calculate_frc_sigma(
 
     elif split_method == "odd_even":
         set1, set2 = split_odd_even(localisations)
+
+    elif split_method == "random":
+        set1, set2 = split_random_blocks(localisations)
 
     image1 = bin_localizations(set1, size=size, mag=magnification)
     image2 = bin_localizations(set2, size=size, mag=magnification)
