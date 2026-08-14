@@ -445,9 +445,7 @@ def calculate_frc(
         set1, set2 = split_odd_even(localisations)
 
     elif split_method == "random":
-        set1, set2 = split_random_blocks(localisations, 25)
-        print(set1)
-        print(set2)
+        set1, set2 = split_random_blocks(localisations, 20)
 
     print("starting image binning \n")
     start = time.time()
