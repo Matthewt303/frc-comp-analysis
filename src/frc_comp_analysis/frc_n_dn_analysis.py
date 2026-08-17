@@ -1,5 +1,3 @@
-#!/home/kxtz813/.conda/envs/matthew_dev/bin/python3
-
 import numpy as np
 import argparse
 import os

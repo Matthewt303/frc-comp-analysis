@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 28 16:13:07 2025
-
-@author: kxtz813
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -66,7 +58,7 @@ def plot_frc(
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
-    fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
+    _, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
     ax.plot(v_raw, frc_raw, "darkmagenta", label=cond_a, linewidth=4.5)
     ax.plot(v_denoised, frc_denoised, "salmon", label=cond_b, linewidth=4.5)
@@ -279,7 +271,7 @@ def plot_frc_sigma(
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
-    fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
+    _, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
     ax.plot(v_raw, frc_raw, "darkmagenta", label=cond_a, linewidth=4.5)
     ax.plot(v_denoised, frc_denoised, "salmon", label=cond_b, linewidth=4.5)
@@ -400,7 +392,7 @@ def plot_frc_single(
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
-    fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
+    _, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
     ax.plot(v, frc, "darkmagenta", label="FRC", linewidth=4.5)
     ax.plot(v, threshold_plot, "royalblue", label="Threshold", linewidth=4.5)
@@ -491,7 +483,7 @@ def plot_frc_single_sigma(
     mpl.rcParams["font.family"] = "sans-serif"
     mpl.rcParams["font.size"] = 28
 
-    fig, ax = plt.subplots(figsize=(11, 11), dpi=500)
+    _, ax = plt.subplots(figsize=(11, 11), dpi=500)
 
     ax.plot(v, frc, "darkmagenta", label="FRC", linewidth=4.5)
     ax.plot(v, sigma_curve, "royalblue", label=r"3-$\sigma$ curve", linewidth=4.5)

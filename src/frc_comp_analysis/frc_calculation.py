@@ -1,5 +1,3 @@
-#!/home/kxtz813/.conda/envs/matthew_dev/bin/python3
-
 import numpy as np
 from scipy.fft import fft2
 from scipy.signal.windows import tukey
