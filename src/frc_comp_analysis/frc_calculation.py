@@ -6,6 +6,7 @@ from scipy.stats import mannwhitneyu, wilcoxon
 from numba import jit
 import time
 import os
+from typing import Optional
 
 
 @jit(nopython=True, nogil=True, cache=False)
@@ -36,7 +37,7 @@ def bin_image(locs: "np.ndarray", size: int) -> "np.ndarray":
 
 
 def bin_localizations(
-    locs: "np.ndarray", size: int = None, mag: float = 1
+    locs: "np.ndarray", size: Optional[int] = None, mag: float = 1
 ) -> "np.ndarray":
     """
     Summary:
@@ -408,7 +409,7 @@ def calculate_frc(
     localisations: "np.ndarray",
     split_method: str,
     magnification: float,
-    size: int = None,
+    size: Optional[int] = None,
 ) -> tuple["np.ndarray"]:
     """
     Summary:
