@@ -18,8 +18,10 @@ def write_args(args: object, out: str) -> None:
     arg_dict = vars(args)
 
     with open(os.path.join(out, "arguments.txt"), "w") as f:
-        for arg, arg_val in zip(arg_dict.keys(), arg_dict.values()):
-            f.write("The " + arg + " is " + str(arg_val) + "\n")
+        f.writelines(
+           "The " + arg + " is " + str(arg_val) + "\n"
+           for arg, arg_val in zip(arg_dict.keys(), arg_dict.values())
+        )
 
 
 def load_reconstructions(folder_path: str) -> list[str]:
