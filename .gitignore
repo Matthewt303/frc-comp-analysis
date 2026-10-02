@@ -11,4 +11,5 @@ wheels/
 
 # Personal scripts
 frc_comp_analysis/rfrc_analysis.py
+frc_comp_analysis/paper_plots.py
 rfrc_analysis.py
