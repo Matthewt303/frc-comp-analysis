@@ -55,7 +55,7 @@ A brief summary of parameters is given here:
 - --condition_A: name of experimental setting for first dataset.
 - --condition_B: name of experimental setting for second dataset.
 - --magnification: scaling factor for super-resolution image. Between 0.05 to 0.20 is recommended
-- --split_method: how the dataset is split. Use 'simple' or 'odd_even'.
+- --split_method: how the dataset is split. Use 'simple', 'odd_even', or 'random'.
 - --criterion: threshold for determining resolution. Use 'fixed' or '3sigma'.
 - --relation: whether the data from each condition are paired or independent. For independent data, the Mann-Whitney U-test is used while for paired data, the Wilcoxon Signed-Rank test is used.
 

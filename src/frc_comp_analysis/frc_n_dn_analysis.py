@@ -187,8 +187,8 @@ def main():
         opt.output_folder,
     )
 
-    p_value_test = calculate_p_value(noisy_frcs, denoised_frcs, opt.relation)
-    io.save_p_value(p_value_test, opt.output_folder)
+    #p_value_test = calculate_p_value(noisy_frcs, denoised_frcs, opt.relation)
+    #io.save_p_value(p_value_test, opt.output_folder)
 
     plot_all(all_data, opt.output_folder)
 
