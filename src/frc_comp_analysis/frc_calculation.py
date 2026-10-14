@@ -364,7 +364,7 @@ def split_odd_even(localisations: "np.ndarray") -> tuple["np.ndarray"]:
 
 
 def split_random_blocks(
-    localisations: "np.ndarray", nblocks: int = 50, seed=None
+    localisations: "np.ndarray", nblocks: int = 50
 ) -> tuple["np.ndarray"]:
     """
     Summary:
@@ -385,6 +385,8 @@ def split_random_blocks(
 
     """
 
+    seed = 20355982562626689319954096387045131882
+    
     n = localisations.shape[0]
     xy = localisations[:, 1:]
 
